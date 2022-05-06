@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 
 public class TextPuzzle : MonoBehaviour
 {
+    public double timeFirstStage, timeSecondStage, timeThirdStage, timeLastStage; 
     public string userInput = "Enter here...";
     private GUIStyle uIStyle = new GUIStyle();
     private Text outputText;
@@ -16,6 +17,7 @@ public class TextPuzzle : MonoBehaviour
     private int firstStage;
     private int secondStage;
     private int lastStage;
+    private double timer;
     private string[] puzzles;
     // Är det elakt att ha specialtecken som "-", ",", "!" och "'"?
     private readonly string[] secondStageWords = { "Eggs", "Hen", "Hammer", "Hen-Hammer", 
@@ -55,6 +57,37 @@ public class TextPuzzle : MonoBehaviour
         else
             Debug.Log("Tried to load next puzzle but has already loaded last puzzle." +
                         "\nPlease enter more puzzles.");
+        
+        if (counter < firstStage / 2)
+        {
+            Debug.Log("Time for next letter");
+            timer = timeFirstStage;
+        }
+
+        if (counter >= firstStage / 2 && counter < firstStage)
+        {
+            Debug.Log("Time for next letters");
+            timer = timeSecondStage;
+        }
+        
+        if (counter >= firstStage && counter < secondStage)
+        {
+            Debug.Log("Time for next word");
+            timer = timeThirdStage;
+        }
+            
+        if (counter >= secondStage)
+        {
+            Debug.Log("Time for next sentence");
+            timer = timeLastStage;
+        }
+    }
+
+    private bool CheckMatch()
+    {
+        if (timer <= 0.0)
+            return false;
+        return userInput == outputText.text;
     }
 
     private void IniPuzzles()
@@ -83,7 +116,7 @@ public class TextPuzzle : MonoBehaviour
         }
         for (int i = secondStage; i < lastStage; i++)
         {
-            //puzzles
+            puzzles[i] = lastStageSentences[Random.Range(0, lastStageSentences.Length)];
         }
     }
 }
