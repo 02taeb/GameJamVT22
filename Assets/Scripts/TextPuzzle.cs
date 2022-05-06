@@ -18,6 +18,7 @@ public class TextPuzzle : MonoBehaviour
     private int secondStage;
     private int lastStage;
     private double timer;
+    private bool active;
     private string[] puzzles;
     // Är det elakt att ha specialtecken som "-", ",", "!" och "'"?
     private readonly string[] secondStageWords = { "Eggs", "Hen", "Hammer", "Hen-Hammer", 
@@ -48,6 +49,31 @@ public class TextPuzzle : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0) 
             && (userInput == "Enter here..." || userInput == "..."))
             userInput = "";
+
+        if (active)
+        {
+            if (timer <= 0.0)
+            {
+                Debug.Log("Fail!"); //Fail
+                active = false;
+                //gameController.drain += 0.5; // eller något lämpligt nummer
+                // Tänker att speeden på tåget har en konstant drain.
+                // Om drainen tar speeden under en viss gräns så Boom!
+                // Drainen blir snabbare om man failar tasks
+                    // och segare om man lyckas.
+                // Drainen kanske också passivt ökas lite hela tiden så den inte blir för liten.
+                // Kanske beroende på hur snabbt man åker och hur låg drainen är för nuvarande.
+                // På det sättet kan det inte gå för bra.
+            }
+
+            if (userInput == outputText.text)
+            {
+                Debug.Log("Sucess"); //Success
+                active = false;
+                //gameController.affectSpeed(int X); // gameController.affectSpeed(int) får innehålla någon check.
+                //gameController.affectDrain(-0.5); // eller något lämpligt nummer
+            }
+        } 
     }
 
     public void LoadNextPuzzle()
@@ -55,39 +81,39 @@ public class TextPuzzle : MonoBehaviour
         if (counter < puzzles.Length - 1)
             outputText.text = puzzles[counter++];
         else
+        {
             Debug.Log("Tried to load next puzzle but has already loaded last puzzle." +
                         "\nPlease enter more puzzles.");
-        
+            return;
+        }
+
+        active = true;
+
+        DebugAndResetTimer();
+    }
+
+    private void DebugAndResetTimer()
+    {
         if (counter < firstStage / 2)
         {
             Debug.Log("Time for next letter");
             timer = timeFirstStage;
         }
-
-        if (counter >= firstStage / 2 && counter < firstStage)
+        else if (counter >= firstStage / 2 && counter < firstStage)
         {
             Debug.Log("Time for next letters");
             timer = timeSecondStage;
         }
-        
-        if (counter >= firstStage && counter < secondStage)
+        else if (counter >= firstStage && counter < secondStage)
         {
             Debug.Log("Time for next word");
             timer = timeThirdStage;
         }
-            
-        if (counter >= secondStage)
+        else if (counter >= secondStage)
         {
             Debug.Log("Time for next sentence");
             timer = timeLastStage;
         }
-    }
-
-    private bool CheckMatch()
-    {
-        if (timer <= 0.0)
-            return false;
-        return userInput == outputText.text;
     }
 
     private void IniPuzzles()
