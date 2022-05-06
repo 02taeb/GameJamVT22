@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,8 +10,9 @@ public class TextPuzzle : MonoBehaviour
 {
     public double timeFirstStage, timeSecondStage, timeThirdStage, timeLastStage; 
     public string userInput = "Enter here...";
-    private GUIStyle uIStyle = new GUIStyle();
+    public Text timerText;
     private Text outputText;
+    private GUIStyle uIStyle = new GUIStyle();
     [SerializeField]
     private int numberOfPuzzles;
     private int counter = 0;
@@ -52,26 +54,30 @@ public class TextPuzzle : MonoBehaviour
 
         if (active)
         {
-            if (timer <= 0.0)
-            {
-                Debug.Log("Fail!"); //Fail
-                active = false;
-                //gameController.drain += 0.5; // eller något lämpligt nummer
-                // Tänker att speeden på tåget har en konstant drain.
-                // Om drainen tar speeden under en viss gräns så Boom!
-                // Drainen blir snabbare om man failar tasks
-                    // och segare om man lyckas.
-                // Drainen kanske också passivt ökas lite hela tiden så den inte blir för liten.
-                // Kanske beroende på hur snabbt man åker och hur låg drainen är för nuvarande.
-                // På det sättet kan det inte gå för bra.
-            }
-
+            timer -= Time.deltaTime;
+            timerText.text = timer.ToString().Substring(0, 4);
+            // Tänker att speeden på tåget har en konstant drain.
+            // Om drainen tar speeden under en viss gräns så Boom!
+            // Drainen blir snabbare om man failar tasks
+            // och segare om man lyckas.
+            // Drainen kanske också passivt ökas lite hela tiden så den inte blir för liten.
+            // Kanske beroende på hur snabbt man åker och hur låg drainen är för nuvarande.
+            // På det sättet kan det inte gå för bra.
             if (userInput == outputText.text)
             {
-                Debug.Log("Sucess"); //Success
+                timerText.text = "Correct!"; //Success
+                StartCoroutine(WaitToClear());
                 active = false;
-                //gameController.affectSpeed(int X); // gameController.affectSpeed(int) får innehålla någon check.
+                //gameController.affectSpeed(int +X);
                 //gameController.affectDrain(-0.5); // eller något lämpligt nummer
+            }
+            else if (timer <= 0.0)
+            {
+                timerText.text = "Time's up!"; //Fail
+                StartCoroutine(WaitToClear());
+                active = false;
+                //gameController.affectSpeed(int -X); // too much?
+                //gameController.affectDrain(0.5); // eller något lämpligt nummer
             }
         } 
     }
@@ -144,5 +150,13 @@ public class TextPuzzle : MonoBehaviour
         {
             puzzles[i] = lastStageSentences[Random.Range(0, lastStageSentences.Length)];
         }
+    }
+
+    IEnumerator WaitToClear()
+    {
+        yield return new WaitForSeconds(1);
+
+        outputText.text = "";
+        userInput = "...";
     }
 }
