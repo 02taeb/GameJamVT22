@@ -43,7 +43,11 @@ public class TextPuzzle : MonoBehaviour
         uIStyle.normal.textColor = Color.white;
         uIStyle.fontSize = outputText.cachedTextGenerator.fontSizeUsedForBestFit;
         uIStyle.alignment = TextAnchor.MiddleCenter;
-        userInput = GUI.TextField(new Rect(501, 594, 288, 81), userInput, uIStyle);   
+        uIStyle.stretchHeight = false;
+        uIStyle.stretchWidth = false;
+        uIStyle.wordWrap = true;
+        uIStyle.clipping = TextClipping.Clip;
+        userInput = GUI.TextField(new Rect(484.75f, 595, 320, 80), userInput, CharacterLimit(), uIStyle);   
     }
 
     private void Update()
@@ -55,7 +59,7 @@ public class TextPuzzle : MonoBehaviour
         if (active)
         {
             timer -= Time.deltaTime;
-            timerText.text = timer.ToString().Substring(0, 4);
+            timerText.text = Math.Round(timer, 2).ToString();
             // Tänker att speeden på tåget har en konstant drain.
             // Om drainen tar speeden under en viss gräns så Boom!
             // Drainen blir snabbare om man failar tasks
@@ -84,6 +88,8 @@ public class TextPuzzle : MonoBehaviour
 
     public void LoadNextPuzzle()
     {
+        DebugAndResetTimer();
+
         if (counter < puzzles.Length - 1)
             outputText.text = puzzles[counter++];
         else
@@ -94,27 +100,45 @@ public class TextPuzzle : MonoBehaviour
         }
 
         active = true;
+    }
 
-        DebugAndResetTimer();
+    private int CharacterLimit()
+    {
+        int limit = int.MinValue;
+        foreach (string s in secondStageWords)
+        {
+            if (limit < s.Length)
+                limit = s.Length;
+        }
+        foreach (string s in lastStageSentences)
+        {
+            if (limit < s.Length)
+                limit = s.Length;
+        }
+        return limit;
     }
 
     private void DebugAndResetTimer()
     {
+        // if counter < 3, 0-2
         if (counter < firstStage / 2)
         {
             Debug.Log("Time for next letter");
             timer = timeFirstStage;
         }
-        else if (counter >= firstStage / 2 && counter < firstStage)
+        // else if counter < 6, 3-5
+        else if (counter < firstStage)
         {
             Debug.Log("Time for next letters");
             timer = timeSecondStage;
         }
-        else if (counter >= firstStage && counter < secondStage)
+        // else if counter < 12, 6-11
+        else if (counter < secondStage)
         {
             Debug.Log("Time for next word");
             timer = timeThirdStage;
         }
+        // else if counter >= 12, 12-?
         else if (counter >= secondStage)
         {
             Debug.Log("Time for next sentence");
@@ -124,28 +148,36 @@ public class TextPuzzle : MonoBehaviour
 
     private void IniPuzzles()
     {
+        // Comments here and in PopulatePuzzles() if numberOfPuzzles == 20
         puzzles = new string[numberOfPuzzles];
+        // firstStage = 6;
         firstStage = numberOfPuzzles / 3;
+        // secondStage = 12;
         secondStage = numberOfPuzzles / 3 * 2;
+        // lastStage = 20;
         lastStage = numberOfPuzzles;
     }
     
     private void PopulatePuzzles()
     {
+        // for 0-2 inclusive
         for (int i = 0; i < firstStage / 2; i++)
         {
             puzzles[i] = alphabet[Random.Range(0, alphabet.Length)].ToString();
         }
+        // for 3-5
         for (int i = firstStage / 2; i < firstStage; i++)
         {
             puzzles[i] = alphabet[Random.Range(0, alphabet.Length)].ToString();
             puzzles[i] += alphabet[Random.Range(0, alphabet.Length)].ToString();
             puzzles[i] += alphabet[Random.Range(0, alphabet.Length)].ToString();
         }
+        // for 6-11
         for (int i = firstStage; i < secondStage; i++)
         {
             puzzles[i] = secondStageWords[Random.Range(0, secondStageWords.Length)];
         }
+        // for 12-19
         for (int i = secondStage; i < lastStage; i++)
         {
             puzzles[i] = lastStageSentences[Random.Range(0, lastStageSentences.Length)];
