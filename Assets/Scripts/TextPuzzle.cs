@@ -13,6 +13,7 @@ public class TextPuzzle : MonoBehaviour
     public Text timerText;
     private Text outputText;
     private GUIStyle uIStyle = new GUIStyle();
+    private GameController gameController;
     [SerializeField]
     private int numberOfPuzzles;
     private int counter = 0;
@@ -32,10 +33,9 @@ public class TextPuzzle : MonoBehaviour
     private void Start()
     {
         outputText = GameObject.Find("OutputTextField").GetComponent<Text>();
-
         IniPuzzles();
-
         PopulatePuzzles();
+        gameController = GameObject.Find("GameController").GetComponent<GameController>();
     }
 
     private void OnGUI()
@@ -60,28 +60,21 @@ public class TextPuzzle : MonoBehaviour
         {
             timer -= Time.deltaTime;
             timerText.text = Math.Round(timer, 2).ToString();
-            // Tänker att speeden på tåget har en konstant drain.
-            // Om drainen tar speeden under en viss gräns så Boom!
-            // Drainen blir snabbare om man failar tasks
-            // och segare om man lyckas.
-            // Drainen kanske också passivt ökas lite hela tiden så den inte blir för liten.
-            // Kanske beroende på hur snabbt man åker och hur låg drainen är för nuvarande.
-            // På det sättet kan det inte gå för bra.
             if (userInput == outputText.text)
             {
-                timerText.text = "Correct!"; //Success
+                timerText.text = "Correct!";
                 StartCoroutine(WaitToClear());
                 active = false;
-                //gameController.affectSpeed(int +X);
-                //gameController.affectDrain(-0.5); // eller något lämpligt nummer
+                gameController.AffectSpeed(3);
+                gameController.AffectDrain(-0.5);
             }
             else if (timer <= 0.0)
             {
-                timerText.text = "Time's up!"; //Fail
+                timerText.text = "Time's up!";
                 StartCoroutine(WaitToClear());
                 active = false;
-                //gameController.affectSpeed(int -X); // too much?
-                //gameController.affectDrain(0.5); // eller något lämpligt nummer
+                gameController.AffectSpeed(-3); // too much?
+                gameController.AffectDrain(0.5);
             }
         } 
     }
@@ -120,68 +113,38 @@ public class TextPuzzle : MonoBehaviour
 
     private void DebugAndResetTimer()
     {
-        // if counter < 3, 0-2
         if (counter < firstStage / 2)
-        {
-            Debug.Log("Time for next letter");
             timer = timeFirstStage;
-        }
-        // else if counter < 6, 3-5
         else if (counter < firstStage)
-        {
-            Debug.Log("Time for next letters");
             timer = timeSecondStage;
-        }
-        // else if counter < 12, 6-11
         else if (counter < secondStage)
-        {
-            Debug.Log("Time for next word");
             timer = timeThirdStage;
-        }
-        // else if counter >= 12, 12-?
         else if (counter >= secondStage)
-        {
-            Debug.Log("Time for next sentence");
             timer = timeLastStage;
-        }
     }
 
     private void IniPuzzles()
     {
-        // Comments here and in PopulatePuzzles() if numberOfPuzzles == 20
         puzzles = new string[numberOfPuzzles];
-        // firstStage = 6;
         firstStage = numberOfPuzzles / 3;
-        // secondStage = 12;
         secondStage = numberOfPuzzles / 3 * 2;
-        // lastStage = 20;
         lastStage = numberOfPuzzles;
     }
     
     private void PopulatePuzzles()
     {
-        // for 0-2 inclusive
         for (int i = 0; i < firstStage / 2; i++)
-        {
             puzzles[i] = alphabet[Random.Range(0, alphabet.Length)].ToString();
-        }
-        // for 3-5
         for (int i = firstStage / 2; i < firstStage; i++)
         {
             puzzles[i] = alphabet[Random.Range(0, alphabet.Length)].ToString();
             puzzles[i] += alphabet[Random.Range(0, alphabet.Length)].ToString();
             puzzles[i] += alphabet[Random.Range(0, alphabet.Length)].ToString();
         }
-        // for 6-11
         for (int i = firstStage; i < secondStage; i++)
-        {
             puzzles[i] = secondStageWords[Random.Range(0, secondStageWords.Length)];
-        }
-        // for 12-19
         for (int i = secondStage; i < lastStage; i++)
-        {
             puzzles[i] = lastStageSentences[Random.Range(0, lastStageSentences.Length)];
-        }
     }
 
     IEnumerator WaitToClear()
