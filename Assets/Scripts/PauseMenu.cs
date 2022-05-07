@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,54 +11,114 @@ public class PauseMenu : MonoBehaviour
     public AudioSource musicAS, sfxAS, ambienceAS;
     public VideoPlayer videoPlayer;
     public Text masterT, musicT, videoT, sfxT, ambienceT;
-    private GameObject pauseMenu;
+    public GameObject pausePanel;
     
     private void Start()
     {
-        
+        if (PlayerPrefs.HasKey("Master"))
+            GetPrefs();
+    }
+
+    private void OnApplicationFocus(bool focus)
+    {
+        if (focus)
+            if (PlayerPrefs.HasKey("Master"))
+                GetPrefs();
+        else 
+            SetPrefs();
+    }
+
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause)
+            if (PlayerPrefs.HasKey("Master"))
+                GetPrefs();
+            else
+            SetPrefs();
+    }
+
+    private void OnApplicationQuit()
+    {
+        SetPrefs();
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            pauseMenu.SetActive(true);
+            pausePanel.SetActive(true);
             Time.timeScale = 0;
+            PauseComponents();
         }
         SetVolumes();
         SetTexts();
+    }
+
+    private void PauseComponents()
+    {
+        musicAS.Stop();
+        videoPlayer.Pause();
+        if (sfxAS != null)
+            sfxAS.Stop();
+        ambienceAS.Stop();
+    }
+
+    private void ResumeComponents()
+    {
+        musicAS.Play();
+        videoPlayer.Play();
+        if (sfxAS != null)
+            sfxAS.Play();
+        ambienceAS.Play();
     }
 
     private void SetVolumes()
     {
         musicAS.volume = 1 * master.value * music.value;
         videoPlayer.SetDirectAudioVolume(0, 1 * master.value * video.value);
-        sfxAS.volume = 1 * master.value * sfx.value;
+        if (sfxAS != null)
+            sfxAS.volume = 1 * master.value * sfx.value;
         ambienceAS.volume = 1 * master.value * ambience.value;
     }
 
     private void SetTexts()
     {
-        masterT.text = (master.value * 100).ToString() + "%";
-        musicT.text = (music.value * 100).ToString() + "%";
-        videoT.text = (videoPlayer.GetDirectAudioVolume(0) * 100).ToString() + "%";
-        sfxT.text = (sfx.value * 100).ToString() + "%";
-        ambienceT.text = (master.value * 100).ToString() + "%";
+        masterT.text = Math.Round(master.value * 100, 0).ToString() + "%";
+        musicT.text = Math.Round(music.value * 100, 0).ToString() + "%";
+        videoT.text = Math.Round(videoPlayer.GetDirectAudioVolume(0) * 100, 0).ToString() + "%";
+        sfxT.text = Math.Round(sfx.value * 100, 0).ToString() + "%";
+        ambienceT.text = Math.Round(ambience.value * 100, 0).ToString() + "%";
     }
 
-    private void Resume()
+    public void Resume()
     {
-        pauseMenu.SetActive(false);
+        pausePanel.SetActive(false);
         Time.timeScale = 1;
+        ResumeComponents();
+        SetPrefs();
     }
 
-    private void Quit()
+    private void SetPrefs()
     {
         PlayerPrefs.SetFloat("Master", master.value);
         PlayerPrefs.SetFloat("Music", music.value);
         PlayerPrefs.SetFloat("Video", video.value);
         PlayerPrefs.SetFloat("SFX", sfx.value);
         PlayerPrefs.SetFloat("Ambience", ambience.value);
+    }
+
+    private void GetPrefs()
+    {
+        master.value = PlayerPrefs.GetFloat("Master");
+        music.value = PlayerPrefs.GetFloat("Music");
+        video.value = PlayerPrefs.GetFloat("Video");
+        sfx.value = PlayerPrefs.GetFloat("SFX");
+        ambience.value = PlayerPrefs.GetFloat("Ambience");
+    }
+
+    public void Quit()
+    {
+        SetPrefs();
         Application.Quit();
     }
 }
