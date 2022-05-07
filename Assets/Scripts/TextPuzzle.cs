@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,7 @@ public class TextPuzzle : MonoBehaviour
     private int secondStage;
     private int lastStage;
     private double timer;
+    private double startTimer;
     private bool active;
     private string[] puzzles;
     // Är det elakt att ha specialtecken som "-", ",", "!" och "'"?
@@ -68,6 +70,7 @@ public class TextPuzzle : MonoBehaviour
                 gameController.AffectSpeed(5);
                 gameController.AffectDrain(-0.1);
                 GUI.FocusControl(null);
+                EditorGUI.FocusTextInControl(null);
             }
             else if (timer <= 0.0)
             {
@@ -76,8 +79,20 @@ public class TextPuzzle : MonoBehaviour
                 active = false;
                 gameController.AffectDrain(0.05);
                 GUI.FocusControl(null);
+                EditorGUI.FocusTextInControl(null);
             }
         } 
+    }
+
+    private void FixedUpdate()
+    {
+        if (!active)
+            startTimer += Time.fixedDeltaTime;
+        if (startTimer > 3)
+        {
+            startTimer = 0;
+            LoadNextPuzzle();
+        }
     }
 
     public void LoadNextPuzzle()
@@ -92,9 +107,7 @@ public class TextPuzzle : MonoBehaviour
                 outputText.text = puzzles[counter++];
             else
             {
-                Debug.Log("Tried to load next puzzle but has already loaded last puzzle." +
-                            "\nPlease enter more puzzles.");
-                return;
+                counter = 0;
             }
 
             active = true;

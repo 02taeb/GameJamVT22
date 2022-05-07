@@ -113,35 +113,47 @@ public class RedGreenButtonPuzzle : MonoBehaviour
         image1.enabled = true;
         isButtonOf = false;
         timeToFail = 0;
+        Success();
     }
     private void turnButton2On()
     {
         image2.enabled = true;
         isButtonOf = false;
         timeToFail = 0;
+        Success();
     }
     private void turnButton3On()
     {
         image3.enabled = true;
         isButtonOf = false;
         timeToFail = 0;
+        Success();
     }
     private void turnButton4On()
     {
         image4.enabled = true;
         isButtonOf = false;
         timeToFail = 0;
+        Success();
     }
     private void turnButton5On()
     {
         image5.enabled = true;
         isButtonOf = false;
         timeToFail = 0;
+        Success();
     }
     private void turnButton6On()
     {
         image6.enabled = true;
         isButtonOf = false;
         timeToFail = 0;
+        Success();
+    }
+
+    private void Success()
+    {
+        gameController.AffectSpeed(3);
+        gameController.AffectDrain(-0.1);
     }
 }
