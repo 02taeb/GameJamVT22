@@ -33,6 +33,12 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
+        if (vp.isPlaying && Input.GetKeyDown(KeyCode.Space))
+        {
+            Time.timeScale = 1;
+            vp.Stop();
+        }
+
         if (Time.timeScale != 0)
         {
             if (!working && Time.timeScale > 0)
