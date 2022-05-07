@@ -95,6 +95,7 @@ public class PauseMenu : MonoBehaviour
         pausePanel.SetActive(false);
         Time.timeScale = 1;
         ResumeComponents();
+        SetPrefs();
     }
 
     private void SetPrefs()
