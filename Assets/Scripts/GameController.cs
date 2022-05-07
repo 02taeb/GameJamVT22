@@ -6,11 +6,11 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    public Text speed;
+    public Text speed, drain;
     public int minSpeed = 30;
     public int maxSpeed = 100;
     public double minDrain = 0.01;
-    private double currentSpeed = 50.0;
+    private double currentSpeed = 70.0;
     private double currentDrain = 0.5;
     private double modifier = 0.01;
     private System.Random rnd = new System.Random();
@@ -24,11 +24,13 @@ public class GameController : MonoBehaviour
     {
         RegulateDrain();
         
-        if (currentSpeed.ToString().Contains("."))
-            speed.text = currentSpeed.ToString().Substring(0, currentSpeed.ToString().IndexOf(","));
+        if (currentSpeed.ToString().Contains(","))
+            speed.text = currentSpeed.ToString().Substring(0, currentSpeed.ToString().IndexOf(",") + 3);
         else
             speed.text = currentSpeed.ToString();
-        
+
+        drain.text = currentDrain.ToString().Substring(0, currentDrain.ToString().IndexOf(",") + 3);
+
         if (currentSpeed < minSpeed)
             Debug.Log("You Died!");
             //Exit application
