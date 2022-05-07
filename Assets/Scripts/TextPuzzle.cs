@@ -59,14 +59,14 @@ public class TextPuzzle : MonoBehaviour
         if (active)
         {
             timer -= Time.deltaTime;
-            timerText.text = Math.Round(timer, 2).ToString();
+            timerText.text = timer.ToString().Substring(0, timer.ToString().IndexOf(",") + 3);    
             if (userInput == outputText.text)
             {
                 timerText.text = "Correct!";
                 StartCoroutine(WaitToClear());
                 active = false;
                 gameController.AffectSpeed(3);
-                gameController.AffectDrain(-0.5);
+                gameController.AffectDrain(-0.05);
             }
             else if (timer <= 0.0)
             {
@@ -74,7 +74,7 @@ public class TextPuzzle : MonoBehaviour
                 StartCoroutine(WaitToClear());
                 active = false;
                 gameController.AffectSpeed(-3); // too much?
-                gameController.AffectDrain(0.5);
+                gameController.AffectDrain(0.05);
             }
         } 
     }
