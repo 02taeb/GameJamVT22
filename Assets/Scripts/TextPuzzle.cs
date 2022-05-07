@@ -54,44 +54,50 @@ public class TextPuzzle : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) 
-            && (userInput == "Enter here..." || userInput == "..."))
-            userInput = "";
-
-        if (active)
+        if (Time.timeScale != 0)
         {
-            timer -= Time.deltaTime;
-            timerText.text = timer.ToString().Substring(0, timer.ToString().IndexOf(",") + 3);    
-            if (userInput == outputText.text)
+            if (Input.GetKeyDown(KeyCode.Mouse0)
+            && (userInput == "Enter here..." || userInput == "..."))
+                userInput = "";
+
+            if (active)
             {
-                timerText.text = "Correct!";
-                StartCoroutine(WaitToClear());
-                active = false;
-                gameController.AffectSpeed(5);
-                gameController.AffectDrain(-0.1);
-                GUI.FocusControl(null);
-                EditorGUI.FocusTextInControl(null);
+                timer -= Time.deltaTime;
+                timerText.text = timer.ToString().Substring(0, timer.ToString().IndexOf(",") + 3);
+                if (userInput == outputText.text)
+                {
+                    timerText.text = "Correct!";
+                    StartCoroutine(WaitToClear());
+                    active = false;
+                    gameController.AffectSpeed(5);
+                    gameController.AffectDrain(-0.1);
+                    GUI.FocusControl(null);
+                    EditorGUI.FocusTextInControl(null);
+                }
+                else if (timer <= 0.0)
+                {
+                    timerText.text = "Time's up!";
+                    StartCoroutine(WaitToClear());
+                    active = false;
+                    gameController.AffectDrain(0.05);
+                    GUI.FocusControl(null);
+                    EditorGUI.FocusTextInControl(null);
+                }
             }
-            else if (timer <= 0.0)
-            {
-                timerText.text = "Time's up!";
-                StartCoroutine(WaitToClear());
-                active = false;
-                gameController.AffectDrain(0.05);
-                GUI.FocusControl(null);
-                EditorGUI.FocusTextInControl(null);
-            }
-        } 
+        }
     }
 
     private void FixedUpdate()
     {
-        if (!active)
-            startTimer += Time.fixedDeltaTime;
-        if (startTimer > 3)
+        if (Time.timeScale != 0)
         {
-            startTimer = 0;
-            LoadNextPuzzle();
+            if (!active)
+                startTimer += Time.fixedDeltaTime;
+            if (startTimer > 3)
+            {
+                startTimer = 0;
+                LoadNextPuzzle();
+            }
         }
     }
 

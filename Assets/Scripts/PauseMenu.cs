@@ -102,7 +102,8 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         pausePanel.SetActive(false);
-        Time.timeScale = 1;
+        if (!wasPlaying)
+            Time.timeScale = 1;
         ResumeComponents();
         SetPrefs();
     }

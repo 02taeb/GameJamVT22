@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Video;
 
 public class GameController : MonoBehaviour
 {
@@ -15,30 +16,42 @@ public class GameController : MonoBehaviour
     private double currentDrain = 0.5;
     private bool working;
     private bool call;
+    private VideoPlayer vp;
 
     private void Start()
     {
-        
+        Time.timeScale = 0;
+        vp = GameObject.Find("Video Player").GetComponent<VideoPlayer>();
+        vp.Play();
+        vp.loopPointReached += EndReached;
+    }
+
+    void EndReached(VideoPlayer vp)
+    {
+        Time.timeScale = 1;
     }
 
     private void Update()
     {
-        if (!working && Time.timeScale > 0)
-            RegulateDrain();
-        
-        if (currentSpeed.ToString().Contains(","))
-            speed.text = currentSpeed.ToString().Substring(0, currentSpeed.ToString().IndexOf(",") + 3);
-        else
-            speed.text = currentSpeed.ToString();
-
-        drain.text = currentDrain.ToString();
-
-        if (currentSpeed < minSpeed)
+        if (Time.timeScale != 0)
         {
-            if (!call)
+            if (!working && Time.timeScale > 0)
+                RegulateDrain();
+
+            if (currentSpeed.ToString().Contains(","))
+                speed.text = currentSpeed.ToString().Substring(0, currentSpeed.ToString().IndexOf(",") + 3);
+            else
+                speed.text = currentSpeed.ToString();
+
+            drain.text = currentDrain.ToString();
+
+            if (currentSpeed < minSpeed)
             {
-                StartCoroutine(ReloadSceneTimer());
-                deathMsg.SetActive(true);
+                if (!call)
+                {
+                    StartCoroutine(ReloadSceneTimer());
+                    deathMsg.SetActive(true);
+                }
             }
         }
     }
@@ -54,10 +67,12 @@ public class GameController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Time.timeScale > 0)
+        if (Time.timeScale != 0)
+        {
             iter++;
-        if (iter % 4 == 0)
-            AffectSpeed(-currentDrain / 20);
+            if (iter % 4 == 0)
+                AffectSpeed(-currentDrain / 20);
+        }
     }
 
     public void AffectDrain(double effect)
