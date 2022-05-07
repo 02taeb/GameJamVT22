@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +10,6 @@ public class GameController : MonoBehaviour
     public double minDrain = 0.01;
     private double currentSpeed = 70.0;
     private double currentDrain = 0.5;
-    private double modifier = 0.01;
-    private System.Random rnd = new System.Random();
 
     void Start()
     {
@@ -57,6 +53,6 @@ public class GameController : MonoBehaviour
 
     private void RegulateDrain()
     {
-        AffectDrain(Time.deltaTime / (1 / (currentDrain * modifier)));
+        AffectDrain((-Math.Log(currentDrain) + 4) / 1000);
     }
 }
