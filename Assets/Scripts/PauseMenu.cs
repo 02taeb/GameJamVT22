@@ -94,7 +94,7 @@ public class PauseMenu : MonoBehaviour
     {
         masterT.text = Math.Round(master.value * 100, 0).ToString() + "%";
         musicT.text = Math.Round(music.value * 100, 0).ToString() + "%";
-        videoT.text = Math.Round(videoPlayer.GetDirectAudioVolume(0) * 100, 0).ToString() + "%";
+        videoT.text = Math.Round(video.value * 100, 0).ToString() + "%";
         sfxT.text = Math.Round(sfx.value * 100, 0).ToString() + "%";
         ambienceT.text = Math.Round(ambience.value * 100, 0).ToString() + "%";
     }
