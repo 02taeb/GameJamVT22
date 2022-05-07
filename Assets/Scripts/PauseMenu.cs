@@ -19,6 +19,27 @@ public class PauseMenu : MonoBehaviour
             GetPrefs();
     }
 
+    private void OnApplicationFocus(bool focus)
+    {
+        if (focus)
+            GetPrefs();
+        else 
+            SetPrefs();
+    }
+
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause)
+            GetPrefs();
+        else
+            SetPrefs();
+    }
+
+    private void OnApplicationQuit()
+    {
+        SetPrefs();
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -61,10 +82,10 @@ public class PauseMenu : MonoBehaviour
     private void SetTexts()
     {
         masterT.text = Math.Round(master.value * 100, 0).ToString() + "%";
-        musicT.text = (music.value * 100).ToString() + "%";
-        videoT.text = (videoPlayer.GetDirectAudioVolume(0) * 100).ToString() + "%";
-        sfxT.text = (sfx.value * 100).ToString() + "%";
-        ambienceT.text = (master.value * 100).ToString() + "%";
+        musicT.text = Math.Round(music.value * 100, 0).ToString() + "%";
+        videoT.text = Math.Round(videoPlayer.GetDirectAudioVolume(0) * 100, 0).ToString() + "%";
+        sfxT.text = Math.Round(sfx.value * 100, 0).ToString() + "%";
+        ambienceT.text = Math.Round(ambience.value * 100, 0).ToString() + "%";
     }
 
     public void Resume()
