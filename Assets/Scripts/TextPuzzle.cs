@@ -47,7 +47,7 @@ public class TextPuzzle : MonoBehaviour
         uIStyle.stretchWidth = false;
         uIStyle.wordWrap = true;
         uIStyle.clipping = TextClipping.Clip;
-        userInput = GUI.TextField(new Rect(386.36f, 370.17f, 460.52f, 41.85f), userInput, CharacterLimit(), uIStyle);   
+        userInput = GUI.TextField(new Rect(407f, 390f, 486.1f, 43.26f), userInput, CharacterLimit(), uIStyle);   
     }
 
     private void Update()
