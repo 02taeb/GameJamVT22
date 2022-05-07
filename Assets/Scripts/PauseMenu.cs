@@ -22,7 +22,8 @@ public class PauseMenu : MonoBehaviour
     private void OnApplicationFocus(bool focus)
     {
         if (focus)
-            GetPrefs();
+            if (PlayerPrefs.HasKey("Master"))
+                GetPrefs();
         else 
             SetPrefs();
     }
@@ -30,8 +31,9 @@ public class PauseMenu : MonoBehaviour
     private void OnApplicationPause(bool pause)
     {
         if (pause)
-            GetPrefs();
-        else
+            if (PlayerPrefs.HasKey("Master"))
+                GetPrefs();
+            else
             SetPrefs();
     }
 
