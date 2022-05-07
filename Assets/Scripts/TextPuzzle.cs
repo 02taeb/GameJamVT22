@@ -67,6 +67,7 @@ public class TextPuzzle : MonoBehaviour
                 active = false;
                 gameController.AffectSpeed(5);
                 gameController.AffectDrain(-0.1);
+                GUI.FocusControl(null);
             }
             else if (timer <= 0.0)
             {
@@ -74,24 +75,30 @@ public class TextPuzzle : MonoBehaviour
                 StartCoroutine(WaitToClear());
                 active = false;
                 gameController.AffectDrain(0.05);
+                GUI.FocusControl(null);
             }
         } 
     }
 
     public void LoadNextPuzzle()
     {
-        DebugAndResetTimer();
-
-        if (counter < puzzles.Length - 1)
-            outputText.text = puzzles[counter++];
-        else
+        if (!active)
         {
-            Debug.Log("Tried to load next puzzle but has already loaded last puzzle." +
-                        "\nPlease enter more puzzles.");
-            return;
-        }
+            DebugAndResetTimer();
+            StopAllCoroutines();
+            userInput = "";
 
-        active = true;
+            if (counter < puzzles.Length - 1)
+                outputText.text = puzzles[counter++];
+            else
+            {
+                Debug.Log("Tried to load next puzzle but has already loaded last puzzle." +
+                            "\nPlease enter more puzzles.");
+                return;
+            }
+
+            active = true;
+        }
     }
 
     private int CharacterLimit()
