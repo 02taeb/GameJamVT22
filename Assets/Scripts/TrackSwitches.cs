@@ -8,6 +8,7 @@ public class TrackSwitches : MonoBehaviour
     public Image[] imgs;
     public Sprite on, off;
     public AudioClip klick;
+    public Text text;
     private AudioSource audioSource;
     private bool lOn = true, rOn;
     private int timer = 0; 
@@ -29,6 +30,10 @@ public class TrackSwitches : MonoBehaviour
         audioSource.PlayOneShot(klick);
         lOn = !lOn;
         rOn = !rOn;
+        if (text.text == "Left Track")
+            text.text = "Right Track";
+        else
+            text.text = "Left Track";
         if (lOn)
         {
             imgs[0].sprite = on;
