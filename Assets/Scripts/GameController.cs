@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
     public double minDrain = 0.01;
     private double currentSpeed = 70.0;
     private double currentDrain = 0.5;
+    private bool working;
 
     void Start()
     {
@@ -18,14 +19,15 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        RegulateDrain();
+        if (!working && Time.timeScale > 0)
+            RegulateDrain();
         
         if (currentSpeed.ToString().Contains(","))
             speed.text = currentSpeed.ToString().Substring(0, currentSpeed.ToString().IndexOf(",") + 3);
         else
             speed.text = currentSpeed.ToString();
 
-        drain.text = currentDrain.ToString().Substring(0, currentDrain.ToString().IndexOf(",") + 3);
+        drain.text = currentDrain.ToString();
 
         if (currentSpeed < minSpeed)
             Debug.Log("You Died!");
@@ -34,7 +36,8 @@ public class GameController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        AffectSpeed(-currentDrain / 10);
+        if(Time.timeScale > 0)
+            AffectSpeed(-currentDrain / 20);
     }
 
     public void AffectDrain(double effect)
@@ -53,6 +56,15 @@ public class GameController : MonoBehaviour
 
     private void RegulateDrain()
     {
-        AffectDrain((-Math.Log(currentDrain) + 4) / 1000);
+        working = true;
+        currentDrain = Mathf.Lerp((float)currentDrain, (float)currentDrain + 0.1f, 1);
+        StartCoroutine(Wait());
+    }
+
+    IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(1);
+
+        working = false;
     }
 }
