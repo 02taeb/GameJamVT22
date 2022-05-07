@@ -12,6 +12,7 @@ public class PauseMenu : MonoBehaviour
     public VideoPlayer videoPlayer;
     public Text masterT, musicT, videoT, sfxT, ambienceT;
     public GameObject pausePanel;
+    private bool wasPlaying;
     
     private void Start()
     {
@@ -56,20 +57,28 @@ public class PauseMenu : MonoBehaviour
 
     private void PauseComponents()
     {
-        musicAS.Stop();
-        videoPlayer.Pause();
+        musicAS.Pause();
+        if (videoPlayer.isPlaying)
+        {
+            videoPlayer.Pause();
+            wasPlaying = true;
+        }
         if (sfxAS != null)
-            sfxAS.Stop();
-        ambienceAS.Stop();
+            sfxAS.Pause();
+        ambienceAS.Pause();
     }
 
     private void ResumeComponents()
     {
-        musicAS.Play();
-        videoPlayer.Play();
+        musicAS.UnPause();
+        if (wasPlaying)
+        {
+            videoPlayer.Play();
+            wasPlaying = false;
+        } 
         if (sfxAS != null)
-            sfxAS.Play();
-        ambienceAS.Play();
+            sfxAS.UnPause();
+        ambienceAS.UnPause();
     }
 
     private void SetVolumes()
