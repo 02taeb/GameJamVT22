@@ -63,7 +63,11 @@ public class GameController : MonoBehaviour
             }
         }
     }
-
+    
+    public double getSpeed()
+    {
+        return currentSpeed;
+    }
     IEnumerator ReloadSceneTimer()
     {
         call = true;

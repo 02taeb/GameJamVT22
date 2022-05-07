@@ -45,4 +45,10 @@ public class TrackSwitches : MonoBehaviour
             imgs[1].sprite = on;
         }
     }
+    
+    public bool getLeft()
+    {
+            return lOn;
+        
+    }
 }
