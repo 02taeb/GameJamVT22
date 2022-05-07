@@ -40,14 +40,14 @@ public class TextPuzzle : MonoBehaviour
 
     private void OnGUI()
     {
-        uIStyle.normal.textColor = Color.white;
-        uIStyle.fontSize = outputText.cachedTextGenerator.fontSizeUsedForBestFit;
+        uIStyle.normal.textColor = Color.green;
+        uIStyle.fontSize = 31;
         uIStyle.alignment = TextAnchor.MiddleCenter;
         uIStyle.stretchHeight = false;
         uIStyle.stretchWidth = false;
         uIStyle.wordWrap = true;
         uIStyle.clipping = TextClipping.Clip;
-        userInput = GUI.TextField(new Rect(484.75f, 595, 320, 80), userInput, CharacterLimit(), uIStyle);   
+        userInput = GUI.TextField(new Rect(386.36f, 370.17f, 460.52f, 41.85f), userInput, CharacterLimit(), uIStyle);   
     }
 
     private void Update()
