@@ -19,7 +19,7 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        if (!working)
+        if (!working && Time.timeScale > 0)
             RegulateDrain();
         
         if (currentSpeed.ToString().Contains(","))
@@ -36,7 +36,8 @@ public class GameController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        AffectSpeed(-currentDrain / 10);
+        if(Time.timeScale > 0)
+            AffectSpeed(-currentDrain / 20);
     }
 
     public void AffectDrain(double effect)

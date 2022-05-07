@@ -65,15 +65,14 @@ public class TextPuzzle : MonoBehaviour
                 timerText.text = "Correct!";
                 StartCoroutine(WaitToClear());
                 active = false;
-                gameController.AffectSpeed(3);
-                gameController.AffectDrain(-0.05);
+                gameController.AffectSpeed(5);
+                gameController.AffectDrain(-0.1);
             }
             else if (timer <= 0.0)
             {
                 timerText.text = "Time's up!";
                 StartCoroutine(WaitToClear());
                 active = false;
-                gameController.AffectSpeed(-3); // too much?
                 gameController.AffectDrain(0.05);
             }
         } 
