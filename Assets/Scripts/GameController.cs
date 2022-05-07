@@ -7,7 +7,7 @@ using UnityEngine.Video;
 public class GameController : MonoBehaviour
 {
     public Text speed, drain;
-    public GameObject deathMsg;
+    public GameObject deathMsg, speedImg;
     public int minSpeed = 30;
     public int maxSpeed = 100;
     private int iter = 1;
@@ -44,6 +44,8 @@ public class GameController : MonoBehaviour
             if (!working && Time.timeScale > 0)
                 RegulateDrain();
 
+            speedImg.transform.Rotate(new Vector3(0, 0, -1)); 
+            
             if (currentSpeed.ToString().Contains(","))
                 speed.text = currentSpeed.ToString().Substring(0, currentSpeed.ToString().IndexOf(",") + 3);
             else
