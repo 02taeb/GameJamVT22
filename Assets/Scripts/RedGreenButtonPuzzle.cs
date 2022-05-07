@@ -60,7 +60,7 @@ public class RedGreenButtonPuzzle : MonoBehaviour
 
         if(timerBetweenTurnOffs <= 0)
         {
-            int rnd = Random.Range(0, 5);
+            int rnd = Random.Range(0, 6);
 
             switch (rnd)
             {
