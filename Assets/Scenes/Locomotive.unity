@@ -1396,7 +1396,7 @@ GameObject:
   - component: {fileID: 456895366}
   - component: {fileID: 456895365}
   m_Layer: 5
-  m_Name: ControlBoardPlaceHolder
+  m_Name: DashboardPlaceHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
