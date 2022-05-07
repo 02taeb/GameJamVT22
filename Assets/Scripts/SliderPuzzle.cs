@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class SliderPuzzle : MonoBehaviour
 {
     public Slider[] sliders;
+    public AudioClip error;
+    private AudioSource audioSource;
     private float[] values = new float[3];
     private GameController gameController;
     private bool change;
@@ -13,6 +15,7 @@ public class SliderPuzzle : MonoBehaviour
     private void Start()
     {
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        audioSource = GameObject.Find("SFXPlayer").GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -23,9 +26,10 @@ public class SliderPuzzle : MonoBehaviour
             foreach (Slider slider in sliders)
             {
                 values[i] = slider.value;
-                slider.value -= 0.0002f;
+                slider.value -= 0.0001f;
                 if (slider.value <= 0)
                 {
+                    audioSource.PlayOneShot(error);
                     slider.value = 0.5f;
                     gameController.AffectDrain(0.05);
                     gameController.AffectSpeed(-3);

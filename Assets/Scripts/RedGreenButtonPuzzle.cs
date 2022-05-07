@@ -7,7 +7,8 @@ using Random = UnityEngine.Random;
 
 public class RedGreenButtonPuzzle : MonoBehaviour
 {
-
+    public AudioClip doubleBeep;
+    private AudioSource audioSource;
     private GameController gameController;
     private bool isButtonOf;
     private float timerBetweenTurnOffs;
@@ -31,6 +32,7 @@ public class RedGreenButtonPuzzle : MonoBehaviour
     {
         timerBetweenTurnOffs = startTimer;
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        audioSource = GameObject.Find("SFXPlayer").GetComponent<AudioSource>();
         image1.enabled = true;
         image2.enabled = true;
         image3.enabled = true;
@@ -61,7 +63,7 @@ public class RedGreenButtonPuzzle : MonoBehaviour
         if(timerBetweenTurnOffs <= 0)
         {
             int rnd = Random.Range(0, 6);
-
+            audioSource.PlayOneShot(doubleBeep);
             switch (rnd)
             {
                 case 0:

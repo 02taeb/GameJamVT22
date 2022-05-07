@@ -12,6 +12,8 @@ public class TextPuzzle : MonoBehaviour
     public double timeFirstStage, timeSecondStage, timeThirdStage, timeLastStage; 
     public string userInput = "Enter here...";
     public Text timerText;
+    public AudioClip beep;
+    private AudioSource audioSource;
     private Text outputText;
     private GUIStyle uIStyle = new GUIStyle();
     private GameController gameController;
@@ -38,6 +40,7 @@ public class TextPuzzle : MonoBehaviour
         IniPuzzles();
         PopulatePuzzles();
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        audioSource = GameObject.Find("SFXPlayer").GetComponent<AudioSource>();
     }
 
     private void OnGUI()
@@ -105,6 +108,7 @@ public class TextPuzzle : MonoBehaviour
     {
         if (!active)
         {
+            audioSource.PlayOneShot(beep);
             DebugAndResetTimer();
             StopAllCoroutines();
             userInput = "";
