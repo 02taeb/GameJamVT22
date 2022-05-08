@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 // Removes ambiguity in entire file between System.Random and UnityEngine.Random
@@ -11,8 +12,9 @@ public class TextPuzzle : MonoBehaviour
 {
     public double timeFirstStage, timeSecondStage, timeThirdStage, timeLastStage; 
     public string userInput = "Enter here...";
-    public Text timerText;
+    public Text timerText, winMsg;
     public AudioClip beep, winSound;
+    public ParticleSystem particles;
     private AudioSource audioSource;
     private Text outputText;
     private GUIStyle uIStyle = new GUIStyle();
@@ -126,15 +128,20 @@ public class TextPuzzle : MonoBehaviour
 
     private void WinMsg()
     {
-        Text msg = GameObject.Find("DeathMsg").GetComponent<Text>();
-        ParticleSystem particles = GameObject.Find("Particles").GetComponent<ParticleSystem>();
         particles.Play();
-        msg.text = "Hen-Hammer gives up!\nYou're too good at running over people.\nYou Win!";
-        msg.color = Color.green;
-        msg.gameObject.SetActive(true);
+        winMsg.text = "Hen-Hammer gives up!\nYou're too good at running over people.\nYou Win!";
+        winMsg.color = Color.green;
+        winMsg.gameObject.SetActive(true);
         audioSource.PlayOneShot(winSound);
         Time.timeScale = 0;
-        StartCoroutine(gameController.ReloadSceneTimer());
+        StartCoroutine(ReloadSceneTimer());
+    }
+
+    IEnumerator ReloadSceneTimer()
+    {
+        yield return new WaitForSeconds(5);
+
+        SceneManager.LoadScene(0);
     }
 
     private int CharacterLimit()
