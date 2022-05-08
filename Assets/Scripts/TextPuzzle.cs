@@ -77,7 +77,6 @@ public class TextPuzzle : MonoBehaviour
                     gameController.AffectSpeed(5);
                     gameController.AffectDrain(-0.1);
                     GUI.FocusControl(null);
-                    EditorGUI.FocusTextInControl(null);
                 }
                 else if (timer <= 0.0)
                 {
@@ -86,7 +85,6 @@ public class TextPuzzle : MonoBehaviour
                     active = false;
                     gameController.AffectDrain(0.05);
                     GUI.FocusControl(null);
-                    EditorGUI.FocusTextInControl(null);
                 }
             }
         }
