@@ -11,7 +11,7 @@ public class SwitchBack : MonoBehaviour
     {
         if (other.CompareTag("Train"))
         {
-            trainPos.y += 1;
+            trainPos.y = 1.61f;
             other.transform.SetPositionAndRotation(trainPos, startQuaternion);
         }
     }
