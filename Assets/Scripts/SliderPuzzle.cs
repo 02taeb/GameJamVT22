@@ -18,7 +18,7 @@ public class SliderPuzzle : MonoBehaviour
         audioSource = GameObject.Find("SFXPlayer").GetComponent<AudioSource>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (Time.timeScale != 0)
         {
@@ -26,7 +26,7 @@ public class SliderPuzzle : MonoBehaviour
             foreach (Slider slider in sliders)
             {
                 values[i] = slider.value;
-                slider.value -= 0.0001f;
+                slider.value -= Time.fixedDeltaTime / 10;
                 if (slider.value <= 0)
                 {
                     audioSource.PlayOneShot(error);
