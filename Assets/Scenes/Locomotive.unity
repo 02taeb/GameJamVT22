@@ -11235,7 +11235,7 @@ MonoBehaviour:
   beep: {fileID: 8300000, guid: ad53b3c8ce34ac84ea4b50a1a65588f5, type: 3}
   winSound: {fileID: 8300000, guid: aa85745572559dd48954b24d06e0ae5a, type: 3}
   particles: {fileID: 12357082}
-  numberOfPuzzles: 5
+  numberOfPuzzles: 20
 --- !u!1 &932905809
 GameObject:
   m_ObjectHideFlags: 0
