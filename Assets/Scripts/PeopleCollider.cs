@@ -18,7 +18,7 @@ public class PeopleCollider : MonoBehaviour
         {
             audioSource.PlayOneShot(audioClip);
             meshRenderer.enabled = false;
-            StartCoroutine (KillWait());
+            StartCoroutine(KillWait());
         }
     }
 
