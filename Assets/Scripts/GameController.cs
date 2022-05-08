@@ -72,7 +72,7 @@ public class GameController : MonoBehaviour
     {
         call = true;
         
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSecondsRealtime(5);
 
         SceneManager.LoadScene(0);
     }

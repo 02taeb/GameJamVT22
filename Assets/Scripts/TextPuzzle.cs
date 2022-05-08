@@ -128,6 +128,7 @@ public class TextPuzzle : MonoBehaviour
 
     private void WinMsg()
     {
+        particles.gameObject.SetActive(true);
         particles.Play();
         winMsg.text = "Hen-Hammer gives up!\nYou're too good at running over people.\nYou Win!";
         winMsg.color = Color.green;
@@ -139,7 +140,7 @@ public class TextPuzzle : MonoBehaviour
 
     IEnumerator ReloadSceneTimer()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSecondsRealtime(5);
 
         SceneManager.LoadScene(0);
     }
