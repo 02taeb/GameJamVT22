@@ -12,7 +12,7 @@ public class TextPuzzle : MonoBehaviour
     public double timeFirstStage, timeSecondStage, timeThirdStage, timeLastStage; 
     public string userInput = "Enter here...";
     public Text timerText;
-    public AudioClip beep;
+    public AudioClip beep, winSound;
     private AudioSource audioSource;
     private Text outputText;
     private GUIStyle uIStyle = new GUIStyle();
@@ -117,11 +117,24 @@ public class TextPuzzle : MonoBehaviour
                 outputText.text = puzzles[counter++];
             else
             {
-                counter = 0;
+                WinMsg();
             }
 
             active = true;
         }
+    }
+
+    private void WinMsg()
+    {
+        Text msg = GameObject.Find("DeathMsg").GetComponent<Text>();
+        ParticleSystem particles = GameObject.Find("Particles").GetComponent<ParticleSystem>();
+        particles.Play();
+        msg.text = "Hen-Hammer gives up!\nYou're too good at running over people.\nYou Win!";
+        msg.color = Color.green;
+        msg.gameObject.SetActive(true);
+        audioSource.PlayOneShot(winSound);
+        Time.timeScale = 0;
+        StartCoroutine(gameController.ReloadSceneTimer());
     }
 
     private int CharacterLimit()

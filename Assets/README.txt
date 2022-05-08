@@ -10,3 +10,4 @@ Klick: https://freesound.org/people/joedeshon/sounds/119415/
 DoubleBeep: https://freesound.org/people/thisusernameis/sounds/426888/
 Beep: https://freesound.org/people/KeyKrusher/sounds/154953/
 Error: https://freesound.org/people/BloodPixelHero/sounds/572936/
+Fanfare: https://freesound.org/people/bone666138/sounds/198874/
